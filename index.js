@@ -1,14 +1,16 @@
 const fs = require("fs");
 const express = require("express");
 
-const index = fs.readFileSync("index.html", "utf-8");
-const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
-const products = data.products;
+// const index = fs.readFileSync("index.html", "utf-8");
+// const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
+// const products = data.products;
 
 const server = express();
 
 // body parser - Inbuilt middleware
 server.use(express.json());
+// server.use(express.urlencoded());
+server.use(express.static("public"));
 
 // Application level middleware
 server.use((req, res, next) => {
