@@ -7,6 +7,19 @@ const products = data.products;
 
 const server = express();
 
+// middleware
+server.use((req, res, next) => {
+  console.log(
+    req.method,
+    req.ip,
+    req.hostname,
+    new Date(),
+    req.get("User-Agent")
+  );
+  next();
+});
+
+// API - Endpoint -
 server.get("/", (req, res) => {
   res.json({ type: "GET" });
 });
