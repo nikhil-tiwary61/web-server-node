@@ -1,6 +1,7 @@
 const fs = require("fs");
 const express = require("express");
 const morgan = require("morgan");
+const { log } = require("console");
 
 // const index = fs.readFileSync("index.html", "utf-8");
 // const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
@@ -29,11 +30,14 @@ server.use(express.static("public"));
 // });
 
 const auth = (req, res, next) => {
-  req.body.password === "123" ? next() : res.sendStatus(401);
+  // console.log(req.query);
+  // req.body.password === "123" ? next() : res.sendStatus(401);
+  next();
 };
 
 // API - Endpoint -
-server.get("/", auth, (req, res) => {
+server.get("/product/:id", auth, (req, res) => {
+  console.log(req.params);
   res.json({ type: "GET" });
 });
 server.post("/", auth, (req, res) => {
