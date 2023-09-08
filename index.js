@@ -7,7 +7,7 @@ const products = data.products;
 
 const server = express();
 
-// middleware
+// Application level middleware
 server.use((req, res, next) => {
   console.log(
     req.method,
@@ -19,11 +19,15 @@ server.use((req, res, next) => {
   next();
 });
 
+const auth = (req, res, next) => {
+  req.query.password === "123" ? next() : res.sendStatus(401);
+};
+
 // API - Endpoint -
-server.get("/", (req, res) => {
+server.get("/", auth, (req, res) => {
   res.json({ type: "GET" });
 });
-server.post("/", (req, res) => {
+server.post("/", auth, (req, res) => {
   res.json({ type: "POST" });
 });
 server.put("/", (req, res) => {
