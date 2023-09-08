@@ -4,8 +4,8 @@ const morgan = require("morgan");
 const { log } = require("console");
 
 // const index = fs.readFileSync("index.html", "utf-8");
-// const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
-// const products = data.products;
+const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
+const products = data.products;
 
 const server = express();
 
@@ -14,33 +14,26 @@ server.use(morgan("combined"));
 
 // body parser - Inbuilt middleware
 server.use(express.json());
-// server.use(express.urlencoded());
-server.use(express.static("public"));
+// server.use(express.static("public"));
 
-// Application level middleware
-// server.use((req, res, next) => {
-//   console.log(
-//     req.method,
-//     req.ip,
-//     req.hostname,
-//     new Date(),
-//     req.get("User-Agent")
-//   );
-//   next();
-// });
+// API - Endpoint
 
-const auth = (req, res, next) => {
-  // console.log(req.query);
-  // req.body.password === "123" ? next() : res.sendStatus(401);
-  next();
-};
+// Products
+//API ROOT, base URL, example - google.com/api/v2/
 
-// API - Endpoint -
-server.get("/product/:id", auth, (req, res) => {
-  console.log(req.params);
-  res.json({ type: "GET" });
+// Read GET /products
+server.get("/products", (req, res) => {
+  res.json(products);
 });
-server.post("/", auth, (req, res) => {
+
+// Read GET /products/:id
+server.get("/products/:id", (req, res) => {
+  const id = +req.params.id;
+  const product = products.find((p) => p.id === id);
+  res.json(product);
+});
+
+server.post("/", (req, res) => {
   res.json({ type: "POST" });
 });
 server.put("/", (req, res) => {
