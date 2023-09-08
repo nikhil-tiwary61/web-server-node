@@ -7,6 +7,9 @@ const products = data.products;
 
 const server = express();
 
+// body parser - Inbuilt middleware
+server.use(express.json());
+
 // Application level middleware
 server.use((req, res, next) => {
   console.log(
@@ -20,7 +23,7 @@ server.use((req, res, next) => {
 });
 
 const auth = (req, res, next) => {
-  req.query.password === "123" ? next() : res.sendStatus(401);
+  req.body.password === "123" ? next() : res.sendStatus(401);
 };
 
 // API - Endpoint -
