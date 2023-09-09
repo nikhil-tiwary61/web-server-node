@@ -17,9 +17,15 @@ server.use(express.json());
 // server.use(express.static("public"));
 
 // API - Endpoint
-
 // Products
-//API ROOT, base URL, example - google.com/api/v2/
+// API ROOT, base URL, example - google.com/api/v2/
+// C R U D
+
+// Create POST /products
+server.post("/products", (req, res) => {
+  products.push(req.body);
+  res.status(201).json(req.body);
+});
 
 // Read GET /products
 server.get("/products", (req, res) => {
@@ -33,12 +39,14 @@ server.get("/products/:id", (req, res) => {
   res.json(product);
 });
 
-server.post("/", (req, res) => {
-  res.json({ type: "POST" });
+// Update PUT /products/:id
+server.put("/products/:id", (req, res) => {
+  const id = +req.params.id;
+  const productIndex = products.findIndex((p) => p.id === id);
+  products.splice(productIndex, 1, { ...req.body, id: id });
+  res.status(201).json();
 });
-server.put("/", (req, res) => {
-  res.json({ type: "PUT" });
-});
+
 server.delete("/", (req, res) => {
   res.json({ type: "DELETE" });
 });
