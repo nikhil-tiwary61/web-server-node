@@ -47,11 +47,17 @@ server.put("/products/:id", (req, res) => {
   res.status(201).json();
 });
 
+// Update PUT /products/:id
+server.patch("/products/:id", (req, res) => {
+  const id = +req.params.id;
+  const productIndex = products.findIndex((p) => p.id === id);
+  const product = products[productIndex];
+  products.splice(productIndex, 1, { ...product, ...req.body });
+  res.status(201).json();
+});
+
 server.delete("/", (req, res) => {
   res.json({ type: "DELETE" });
-});
-server.patch("/", (req, res) => {
-  res.json({ type: "PATCH" });
 });
 
 server.get("/demo", (req, res) => {
