@@ -47,7 +47,7 @@ server.put("/products/:id", (req, res) => {
   res.status(201).json();
 });
 
-// Update PUT /products/:id
+// Update PATCH /products/:id
 server.patch("/products/:id", (req, res) => {
   const id = +req.params.id;
   const productIndex = products.findIndex((p) => p.id === id);
@@ -56,8 +56,13 @@ server.patch("/products/:id", (req, res) => {
   res.status(201).json();
 });
 
-server.delete("/", (req, res) => {
-  res.json({ type: "DELETE" });
+// Delete DELETE /products/:id
+server.delete("/products/:id", (req, res) => {
+  const id = +req.params.id;
+  const productIndex = products.findIndex((p) => p.id === id);
+  const product = products[productIndex];
+  products.splice(productIndex, 1);
+  res.json(product);
 });
 
 server.get("/demo", (req, res) => {
