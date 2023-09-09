@@ -2,40 +2,40 @@ const fs = require("fs");
 const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
 const users = data.users;
 
-exports.createProduct = (req, res) => {
+exports.createUser = (req, res) => {
   users.push(req.body);
   res.status(201).json(req.body);
 };
 
-exports.getProducts = (req, res) => {
+exports.getUsers = (req, res) => {
   res.json(users);
 };
 
-exports.getProduct = (req, res) => {
+exports.getUser = (req, res) => {
   const id = +req.params.id;
-  const product = users.find((p) => p.id === id);
-  res.json(product);
+  const user = users.find((p) => p.id === id);
+  res.json(user);
 };
 
-exports.replaceProduct = (req, res) => {
+exports.replaceUser = (req, res) => {
   const id = +req.params.id;
-  const productIndex = users.findIndex((p) => p.id === id);
-  users.splice(productIndex, 1, { ...req.body, id: id });
+  const userIndex = users.findIndex((p) => p.id === id);
+  users.splice(userIndex, 1, { ...req.body, id: id });
   res.status(201).json();
 };
 
-exports.updateProduct = (req, res) => {
+exports.updateUser = (req, res) => {
   const id = +req.params.id;
-  const productIndex = users.findIndex((p) => p.id === id);
-  const product = users[productIndex];
-  users.splice(productIndex, 1, { ...product, ...req.body });
+  const userIndex = users.findIndex((p) => p.id === id);
+  const user = users[userIndex];
+  users.splice(userIndex, 1, { ...user, ...req.body });
   res.status(201).json();
 };
 
-exports.deleteProduct = (req, res) => {
+exports.deleteUser = (req, res) => {
   const id = +req.params.id;
-  const productIndex = users.findIndex((p) => p.id === id);
-  const product = users[productIndex];
-  users.splice(productIndex, 1);
-  res.json(product);
+  const userIndex = users.findIndex((p) => p.id === id);
+  const user = users[userIndex];
+  users.splice(userIndex, 1);
+  res.json(user);
 };
