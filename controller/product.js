@@ -55,10 +55,12 @@ exports.updateProduct = async (req, res) => {
 };
 
 // Delete
-exports.deleteProduct = (req, res) => {
+exports.deleteProduct = async (req, res) => {
   const id = req.params.id;
-  const productIndex = products.findIndex((p) => p.id === id);
-  const product = products[productIndex];
-  products.splice(productIndex, 1);
-  res.json(product);
+  try {
+    const doc = await Product.findOneAndDelete({ _id: id });
+    res.status(201).json(doc);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 };
