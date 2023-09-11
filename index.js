@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const server = express();
 const productRouter = require("./routes/product");
@@ -8,6 +9,6 @@ server.use(express.json());
 server.use("/products", productRouter.router);
 server.use("/users", userRouter.router);
 
-server.listen(8080, () => {
+server.listen(process.env.PORT, () => {
   console.log("server started");
 });
