@@ -4,11 +4,17 @@ const Product = model.Product;
 const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
 const products = data.products;
 
-exports.createProduct = (req, res) => {
+// Create
+exports.createProduct = async (req, res) => {
   const product = new Product(req.body);
-  product.save().then((doc) => {
-    res.status(201).json(doc);
-  });
+  let error;
+  try {
+    let createdProduct = await product.save();
+    res.status(201).json(createdProduct);
+  } catch (err) {
+    error = err;
+    res.status(400).json(error);
+  }
 };
 
 exports.getProducts = (req, res) => {
