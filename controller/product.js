@@ -29,23 +29,30 @@ exports.getProduct = async (req, res) => {
   res.json(product);
 };
 
-exports.replaceProduct = (req, res) => {
-  const id = +req.params.id;
-  const productIndex = products.findIndex((p) => p.id === id);
-  products.splice(productIndex, 1, { ...req.body, id: id });
-  res.status(201).json();
+// Update
+exports.replaceProduct = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const doc = await Product.findOneAndReplace({ _id: id }, req.body, {
+      new: true,
+    });
+    res.status(201).json(doc);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 };
 
 exports.updateProduct = (req, res) => {
-  const id = +req.params.id;
+  const id = req.params.id;
   const productIndex = products.findIndex((p) => p.id === id);
   const product = products[productIndex];
   products.splice(productIndex, 1, { ...product, ...req.body });
   res.status(201).json();
 };
 
+// Delete
 exports.deleteProduct = (req, res) => {
-  const id = +req.params.id;
+  const id = req.params.id;
   const productIndex = products.findIndex((p) => p.id === id);
   const product = products[productIndex];
   products.splice(productIndex, 1);
