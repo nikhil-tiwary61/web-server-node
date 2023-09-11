@@ -9,7 +9,7 @@ exports.createProduct = async (req, res) => {
   const product = new Product(req.body);
   let error;
   try {
-    let createdProduct = await product.save();
+    const createdProduct = await product.save();
     res.status(201).json(createdProduct);
   } catch (err) {
     error = err;
@@ -17,13 +17,15 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-exports.getProducts = (req, res) => {
+// Read
+exports.getProducts = async (req, res) => {
+  const products = await Product.find({ price: { $gt: 500 } });
   res.json(products);
 };
 
-exports.getProduct = (req, res) => {
-  const id = +req.params.id;
-  const product = products.find((p) => p.id === id);
+exports.getProduct = async (req, res) => {
+  const id = req.params.id;
+  const product = await Product.findById(id);
   res.json(product);
 };
 
