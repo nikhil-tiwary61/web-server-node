@@ -1,10 +1,14 @@
 const fs = require("fs");
+const model = require("../model/product");
+const Product = model.Product;
 const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
 const products = data.products;
 
 exports.createProduct = (req, res) => {
-  products.push(req.body);
-  res.status(201).json(req.body);
+  const product = new Product(req.body);
+  product.save().then((doc) => {
+    res.status(201).json(doc);
+  });
 };
 
 exports.getProducts = (req, res) => {
