@@ -1,7 +1,10 @@
 const fs = require("fs");
+const path = require("path");
 const model = require("../model/product");
 const Product = model.Product;
-const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
+const data = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "../data.json"), "utf-8")
+);
 const products = data.products;
 
 // Create
