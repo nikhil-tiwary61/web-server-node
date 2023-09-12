@@ -14,6 +14,7 @@ const productSchema = new Schema({
     type: Number,
     min: [0, "Invalid min discount"],
     max: [5, "Invalid max discount"],
+    default: 0,
   },
   stock: { type: String },
   brand: { type: String, required: true },
