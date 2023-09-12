@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 const cors = require("cors");
 const server = express();
 const productRouter = require("./routes/product");
@@ -19,6 +20,9 @@ server.use(express.json());
 server.use(express.static(process.env.PUBLIC_DIR));
 server.use("/products", productRouter.router);
 server.use("/users", userRouter.router);
+server.use("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+});
 
 server.listen(process.env.PORT, () => {
   console.log("server started");
