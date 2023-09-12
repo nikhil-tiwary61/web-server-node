@@ -16,6 +16,7 @@ async function main() {
 // body parser - Inbuilt middleware
 server.use(cors());
 server.use(express.json());
+server.use(express.static(process.env.PUBLIC_DIR));
 server.use("/products", productRouter.router);
 server.use("/users", userRouter.router);
 
