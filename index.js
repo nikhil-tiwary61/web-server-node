@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const server = express();
 const productRouter = require("./routes/product");
 const userRouter = require("./routes/user");
@@ -13,6 +14,7 @@ async function main() {
 }
 
 // body parser - Inbuilt middleware
+server.use(cors());
 server.use(express.json());
 server.use("/products", productRouter.router);
 server.use("/users", userRouter.router);
