@@ -1,11 +1,23 @@
 const fs = require("fs");
 const path = require("path");
+const ejs = require("ejs");
 const model = require("../model/product");
 const Product = model.Product;
-const data = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../data.json"), "utf-8")
-);
-const products = data.products;
+// const data = JSON.parse(
+//   fs.readFileSync(path.resolve(__dirname, "../data.json"), "utf-8")
+// );
+// const products = data.products;
+
+exports.getProductsSSR = async (req, res) => {
+  const products = await Product.find();
+  ejs.renderFile(
+    path.resolve(__dirname, "../pages/index.ejs"),
+    { products: products },
+    function (err, str) {
+      res.send(str);
+    }
+  );
+};
 
 // Create
 exports.createProduct = async (req, res) => {
