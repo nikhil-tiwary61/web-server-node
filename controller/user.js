@@ -1,10 +1,10 @@
 const model = require("../model/user");
-const User = model.Product;
+const User = model.User;
 
 exports.createUser = async (req, res) => {
   const user = new User(req.body);
   try {
-    const createdUser = await User.save();
+    const createdUser = await user.save();
     res.status(201).json(createdUser);
   } catch (err) {
     res.status(400).json(err);
