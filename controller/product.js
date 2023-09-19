@@ -18,6 +18,14 @@ exports.getProductsSSR = async (req, res) => {
     }
   );
 };
+exports.getAddForm = async (req, res) => {
+  ejs.renderFile(
+    path.resolve(__dirname, "../pages/add.ejs"),
+    function (err, str) {
+      res.send(str);
+    }
+  );
+};
 
 // Create
 exports.createProduct = async (req, res) => {
