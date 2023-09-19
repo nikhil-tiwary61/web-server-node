@@ -1,41 +1,60 @@
-const fs = require("fs");
-const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
-const users = data.users;
+const model = require("../model/user");
+const User = model.Product;
 
-exports.createUser = (req, res) => {
-  users.push(req.body);
-  res.status(201).json(req.body);
+exports.createUser = async (req, res) => {
+  const user = new User(req.body);
+  try {
+    const createdUser = await User.save();
+    res.status(201).json(createdUser);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 };
 
-exports.getUsers = (req, res) => {
-  res.json(users);
+// Read
+exports.getUsers = async (req, res) => {
+  const Users = await User.find();
+  res.json(Users);
 };
 
-exports.getUser = (req, res) => {
-  const id = +req.params.id;
-  const user = users.find((p) => p.id === id);
-  res.json(user);
+exports.getUser = async (req, res) => {
+  const id = req.params.id;
+  const User = await User.findById(id);
+  res.json(User);
 };
 
-exports.replaceUser = (req, res) => {
-  const id = +req.params.id;
-  const userIndex = users.findIndex((p) => p.id === id);
-  users.splice(userIndex, 1, { ...req.body, id: id });
-  res.status(201).json();
+// Update
+exports.replaceUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const doc = await User.findOneAndReplace({ _id: id }, req.body, {
+      new: true,
+    });
+    res.status(201).json(doc);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 };
 
-exports.updateUser = (req, res) => {
-  const id = +req.params.id;
-  const userIndex = users.findIndex((p) => p.id === id);
-  const user = users[userIndex];
-  users.splice(userIndex, 1, { ...user, ...req.body });
-  res.status(201).json();
+exports.updateUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const doc = await User.findOneAndUpdate({ _id: id }, req.body, {
+      new: true,
+    });
+    res.status(201).json(doc);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 };
 
-exports.deleteUser = (req, res) => {
-  const id = +req.params.id;
-  const userIndex = users.findIndex((p) => p.id === id);
-  const user = users[userIndex];
-  users.splice(userIndex, 1);
-  res.json(user);
+// Delete
+exports.deleteUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const doc = await User.findOneAndDelete({ _id: id });
+    res.status(201).json(doc);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 };
