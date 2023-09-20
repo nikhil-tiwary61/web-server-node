@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 const server = express();
 const productRouter = require("./routes/product");
 const userRouter = require("./routes/user");
@@ -15,6 +16,15 @@ async function main() {
 }
 
 // body parser - Inbuilt middleware
+server.use((req, res, next) => {
+  const token = req.get("Authorization").split("Bearer ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    decoded.email ? next() : res.sendStatus(401);
+  } catch (err) {
+    res.sendStatus(401);
+  }
+});
 server.use(cors());
 server.use(express.json());
 server.use(express.urlencoded());
