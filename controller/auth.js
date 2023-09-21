@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const model = require("../model/user");
 const User = model.User;
 
@@ -14,6 +15,8 @@ exports.createUser = async (req, res) => {
   const token = jwt.sign({ email: req.body.email }, privateKey, {
     algorithm: "RS256",
   });
+  const hash = bcrypt.hashSync(req.body.password, 10);
+  user.password = hash;
   user.token = token;
   try {
     const createdUser = await user.save();
