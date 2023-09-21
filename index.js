@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const server = express();
 const productRouter = require("./routes/product");
 const userRouter = require("./routes/user");
+const authRouter = require("./routes/auth");
 
 // db connection
 main().catch((err) => console.log(err));
@@ -16,21 +17,24 @@ async function main() {
 }
 
 // body parser - Inbuilt middleware
-server.use((req, res, next) => {
-  const token = req.get("Authorization").split("Bearer ")[1];
+const auth = (req, res, next) => {
   try {
+    const token = req.get("Authorization").split("Bearer ")[1];
     const decoded = jwt.verify(token, process.env.SECRET);
+    console.log(decoded);
     decoded.email ? next() : res.sendStatus(401);
   } catch (err) {
     res.sendStatus(401);
   }
-});
+};
+
 server.use(cors());
 server.use(express.json());
 server.use(express.urlencoded());
 server.use(express.static(path.resolve(__dirname, process.env.PUBLIC_DIR)));
-server.use("/products", productRouter.router);
-server.use("/users", userRouter.router);
+server.use("/auth", authRouter.router);
+server.use("/products", auth, productRouter.router);
+server.use("/users", auth, userRouter.router);
 server.use("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "dist", "index.html"));
 });
